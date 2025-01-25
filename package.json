@@ -1,0 +1,25 @@
+{
+  "name": "basic-backend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node dist/index.js",
+    "build": "npx esbuild ./src/index.ts --bundle --platform=node --outfile=dist/index.js",
+    "dev": "npm run build && npm run start"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "description": "",
+  "dependencies": {
+    "@prisma/client": "^6.2.1",
+    "@types/express": "^5.0.0",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "prisma": "^6.2.1"
+  },
+  "devDependencies": {
+    "esbuild": "0.24.2"
+  }
+}
