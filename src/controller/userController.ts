@@ -26,7 +26,7 @@ export const createUser: RequestHandler = async (req, res) => {
     })
 
     res.status(200).json({
-        data: newUser,
+        newUser,
         message: "User created!!"
     })
 }

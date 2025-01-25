@@ -2,26 +2,22 @@
 import { RequestHandler } from "express";
 import prismaClient from "../db/db.config";
 
-
-export const createPost: RequestHandler = async (req, res) => {
-    const { user_id, title, description } = req.body;
-
-    const newPost = await prismaClient.post.create({
-        data: {
-            user_id: Number(user_id),
-            title,
-            description
-        }
-    })
-
-    res.status(200).json({
-        data: newPost,
-        message: "Post created!!"
-    })
-}
-
 export const fetchPosts: RequestHandler = async (req, res) => {
+    let page = Number(req.query.page) || 1;
+    let limit = Number(req.query.limit) || 10;
+
+    if (page <= 0) {
+        page = 1;
+    }
+    if (limit <= 0 || limit > 100) {
+        limit = 10;
+    }
+
+    const skip = (page - 1) * limit;
+
     const posts = await prismaClient.post.findMany({
+        skip: skip,
+        take: limit,
         include: {
             comment: {
                 include: {
@@ -36,20 +32,42 @@ export const fetchPosts: RequestHandler = async (req, res) => {
         orderBy: {
             id: "desc"
         },
-        // where: {
-        //     comment_count: {
-        //         gt: 0
-        //     }
-        // }
         where: {
-            title: {
-                startsWith: "Next",
+            NOT: {
+                title: {
+                    endsWith: "Blog"
+                }
             }
         }
     });
 
+    const totalPosts = await prismaClient.post.count();
+    const totalPages = Math.ceil(totalPosts / limit);
     res.status(200).json({
-        posts
+        posts,
+        meta: {
+            totalPages,
+            currentPage: page,
+            limit: limit
+        }
+    })
+};
+
+
+export const createPost: RequestHandler = async (req, res) => {
+    const { user_id, title, description } = req.body;
+
+    const newPost = await prismaClient.post.create({
+        data: {
+            user_id: Number(user_id),
+            title,
+            description
+        }
+    })
+
+    res.status(200).json({
+        data: newPost,
+        message: "Post created Successfully!!"
     })
 }
 

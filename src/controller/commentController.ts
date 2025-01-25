@@ -1,5 +1,3 @@
-
-
 import { RequestHandler } from "express";
 import prismaClient from "../db/db.config";
 
@@ -40,16 +38,15 @@ export const createComment: RequestHandler = async (req, res) => {
         data: {
             user_id: Number(user_id),
             post_id: Number(post_id),
-            comment
+            comment,
         }
     })
 
     res.status(200).json({
         data: newComment,
-        message: "Comment Created!!"
+        message: "Comment Created Successfully!!"
     })
 }
-
 
 
 export const showComment: RequestHandler = async (req, res) => {
@@ -64,30 +61,14 @@ export const showComment: RequestHandler = async (req, res) => {
     })
 }
 
-export const updatePost: RequestHandler = async (req, res) => {
-    const commentId = req.params.id;
-    const { comment } = req.body;
-
-    await prismaClient.comment.update({
-        where: {
-            id: commentId
-        },
-        data: {
-            comment
-        }
-    })
-    res.status(201).json({
-        message: "Comment updated Successfully"
-    })
-}
-
 export const deleteComment: RequestHandler = async (req, res) => {
     const commentId = req.params.id;
+    const { post_id } = req.body;
 
     // Decrease the comment counter
     await prismaClient.post.update({
         where: {
-            id: post_id as number,
+            id: Number(post_id),
         },
         data: {
             comment_count: {
@@ -101,6 +82,7 @@ export const deleteComment: RequestHandler = async (req, res) => {
             id: commentId,
         }
     })
+
     res.status(200).json({
         message: "Comment deleted Successfully!!"
     })

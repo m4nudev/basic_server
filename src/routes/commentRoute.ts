@@ -6,7 +6,6 @@ const commentRouter = Router();
 
 
 commentRouter.post("/", createComment);
-// commentRouter.put("/:id", updateComment);
 commentRouter.get("/:id", showComment);
 commentRouter.get("/", fetchComments);
 commentRouter.delete("/:id", deleteComment);

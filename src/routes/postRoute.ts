@@ -1,6 +1,6 @@
 
 import { Router } from "express";
-import { createPost, deletePost, fetchPosts, showPost, updatePost } from "../controller/postController";
+import { createPost, deletePost, fetchPosts, searchPost, showPost, updatePost } from "../controller/postController";
 
 const postRouter = Router();
 
@@ -10,7 +10,7 @@ postRouter.put("/:id", updatePost);
 postRouter.get("/:id", showPost);
 postRouter.get("/", fetchPosts);
 postRouter.delete("/:id", deletePost);
-postRouter.get("/:id", showPost);
+postRouter.get("/search", searchPost);
 
 
 
